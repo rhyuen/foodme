@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon server.js",
+    "dev": "nodemon server.js",
     "yelp": "node yelp.js"
   },
   "dependencies": {
@@ -12,6 +13,7 @@
     "express": "~4.13.1",
     "express-handlebars": "3.0.0",
     "morgan": "~1.6.1",
+    "nconf": "0.8.4",
     "serve-favicon": "~2.3.0",
     "yelp": "1.0.1"
   },

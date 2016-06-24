@@ -11,7 +11,6 @@ var mainroute = require("./mainroute.js");
 
 var app = express();
 
-// view engine setup
 app.set('views', path.join(__dirname, 'public/views'));
 app.set("PORT", process.env.PORT || 9098);
 

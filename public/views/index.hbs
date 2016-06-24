@@ -27,51 +27,52 @@ main{height: 100%;}
       <p style="color:white" >OnClick</p>
     </span>
 
-    <div class="mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__title">
 
-        <ul class="mdl-list">
-          <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-              <i class="material-icons">filter_1</i>
-              Lazy
-            </span>
-            <span class="mdl-list__item-secondary-action">
-              <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-1">
-                <input type="radio" id="list-option-1" class="mdl-radio__button" name="options" value="1" checked />
-              </label>
-            </span>
-          </li>
-          <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-              <i class="material-icons">filter_2</i>
-              Frugal + Lazy
-            </span>
-              <span class="mdl-list__item-secondary-action">
-                <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-2">
-                  <input type="radio" id="list-option-2" class="mdl-radio__button" name="options" value="2"  />
-                </label>
-            </span>
-          </li>
-          <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
-              <i class="material-icons">filter_3</i>
-              Picky, Frugal + Lazy
-            </span>
-              <span class="mdl-list__item-secondary-action">
-                <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-3">
-                  <input type="radio" id="list-option-3" class="mdl-radio__button" name="options" value="3"  />
-                </label>
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
 
 
 
 
     <ul id = "restContent">
+      <div class="mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+
+          <ul class="mdl-list">
+            <li class="mdl-list__item">
+              <span class="mdl-list__item-primary-content">
+                <i class="material-icons">filter_1</i>
+                Lazy
+              </span>
+              <span class="mdl-list__item-secondary-action">
+                <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-1">
+                  <input type="radio" id="list-option-1" class="mdl-radio__button" name="options" value="1" checked />
+                </label>
+              </span>
+            </li>
+            <li class="mdl-list__item">
+              <span class="mdl-list__item-primary-content">
+                <i class="material-icons">filter_2</i>
+                Frugal + Lazy
+              </span>
+                <span class="mdl-list__item-secondary-action">
+                  <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-2">
+                    <input type="radio" id="list-option-2" class="mdl-radio__button" name="options" value="2"  />
+                  </label>
+              </span>
+            </li>
+            <li class="mdl-list__item">
+              <span class="mdl-list__item-primary-content">
+                <i class="material-icons">filter_3</i>
+                Picky, Frugal + Lazy
+              </span>
+                <span class="mdl-list__item-secondary-action">
+                  <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-3">
+                    <input type="radio" id="list-option-3" class="mdl-radio__button" name="options" value="3"  />
+                  </label>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </ul>
 
   </div>
@@ -102,7 +103,7 @@ main{height: 100%;}
         console.log(data);
 
 
-        
+
         var myLatLng = {lat:  position.coords.latitude, lng: position.coords.longitude};
 
         map = new google.maps.Map(document.getElementById("map"), {
@@ -115,6 +116,10 @@ main{height: 100%;}
           position: myLatLng,
           title: "You're Here!"
         });
+
+        function emphasizeMapMarker(){
+          
+        }
 
         for(var i = 0; i < data.length; i++){
           var otherMarkers = new google.maps.Marker({
