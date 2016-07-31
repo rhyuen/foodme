@@ -47,7 +47,10 @@ if(navigator.geolocation){
           .append($("<div/>", {class: "mdl-card mdl-shadow--2dp"})
           .append($("<div/>", {class: "mdl-card__title"})
           .append($("<h2/>", {class: "mdl-card__title-text", text: data[i].name})))
-          .append($("<div/>", {class: "mdl-card__supporting-text", text: data[i].phone}))
+          .append($("<div/>", {class: "mdl-card__supporting-text", text: data[i].phone.substring(3)})
+          .append($("<p/>", {text: data[i].address[0]}))
+          .append($("<p/>", {text: "Dist: " + Math.ceil(data[i].relDistance) + "m"}))
+          .append($("<p/>", {text: "Score: " + data[i].cumulRating + "/5"})))
           .append($("<div/>", {class: "mdl-card__actions mdl-card--border"})
           .append($("<a/>", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", text: data[i].categories[0][0]})))
           .append($("<div/>", {class: "mdl-card__menu"})
@@ -57,4 +60,7 @@ if(navigator.geolocation){
       }
     });
   });
+}else{
+  console.log("GPS Coords Permission Denied.");
+  //Put up a lack of gps perm notice.
 }
