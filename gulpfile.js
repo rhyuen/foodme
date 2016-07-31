@@ -9,5 +9,7 @@ gulp.task("browserSync", function(){
 });
 
 gulp.task("watch", ["browserSync"], function(){
-  gulp.watch("public/views/*.hbs", browserSync.reload);
+  gulp.watch("public/views/**/*.css", browserSync.reload);
+  gulp.watch("public/views/**/*.js", browserSync.reload);
+  gulp.watch("public/views/**/*.hbs", browserSync.reload);
 });

@@ -1,73 +1,28 @@
-<style>
-html, body{height: 100% ;margin: 0; padding: 0;}
-#map{height: 100%;}
-main{height: 100%;}
-.mdl-layout__drawer{
-  background: url("../images/fw3.jpg") center/cover;
-  width: 20%;
-}
-
-.mdl-card{
-  width: 95%;
-  margin-top: 2%;
-}
-
-.demo-list-radio {
-  display: inline;
-}
-
-
-
-</style>
+<link rel = "stylesheet" type = "text/css" href = "./views/css/index.css"/>
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
   <div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">
-      <a href = "/">LazyFood</a><br/>
-      <p style="color:white" >OnClick</p>
-    </span>
+    <div class = "nested_drawer">
+      <span class="mdl-layout-title root_title">
+        <span class = "title_card">
+          <button id = "foodmenow-menu-lower-left">
+            <i class = "material-icons md-48">apps</i>
+          </button>
+          <ul class = "mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+            for="foodmenow-menu-lower-left">
+            <li disabled class="mdl-menu__item"><a href = "">FoodMeNow</a></li>
+            <li class="mdl-menu__item"><a href = "https://randomchatter.herokuapp.com">RandomChatter</a></li>
+            <li class="mdl-menu__item"><a href = "https://mailgener8r.herokuapp.com">MailGener8r</a></li>
+            <li class="mdl-menu__item"><a href = "https://rhyuen.github.io">R.Yuen</a></li>
+          </ul>
+
+        </span>
+        <span class = "title_card"><a id = "banner_text" href = "/">FoodMeNow</a><br/></span>
+      </span>
+    </div>
+
 
     <ul id = "restContent">
-      <div class="mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__title">
-
-          <ul class="mdl-list">
-            <li class="mdl-list__item">
-              <span class="mdl-list__item-primary-content">
-                <i class="material-icons">filter_1</i>
-                Lazy
-              </span>
-              <span class="mdl-list__item-secondary-action">
-                <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-1">
-                  <input type="radio" id="list-option-1" class="mdl-radio__button" name="options" value="1" checked />
-                </label>
-              </span>
-            </li>
-            <li class="mdl-list__item">
-              <span class="mdl-list__item-primary-content">
-                <i class="material-icons">filter_2</i>
-                Frugal + Lazy
-              </span>
-                <span class="mdl-list__item-secondary-action">
-                  <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-2">
-                    <input type="radio" id="list-option-2" class="mdl-radio__button" name="options" value="2"  />
-                  </label>
-              </span>
-            </li>
-            <li class="mdl-list__item">
-              <span class="mdl-list__item-primary-content">
-                <i class="material-icons">filter_3</i>
-                Picky, Frugal + Lazy
-              </span>
-                <span class="mdl-list__item-secondary-action">
-                  <label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for="list-option-3">
-                    <input type="radio" id="list-option-3" class="mdl-radio__button" name="options" value="3"  />
-                  </label>
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
     </ul>
 
   </div>
@@ -78,81 +33,4 @@ main{height: 100%;}
 
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSxpeFPHeoc3kliVyHywWeEpEsw6C6vzQ" async defer></script>
-<script type= "text/javascript">
-  function removeCopies(container){
-    if(container.length === 1)
-      return container;
-    var caselessContainer = container.map(function(val){
-      return val.toUpperCase();
-    });
-    return caselessContainer.filter(function(value, index, arr){
-        return caselessContainer.indexOf(value) === index;
-    });
-  }
-
-  if(navigator.geolocation){
-
-    var map;
-    navigator.geolocation.getCurrentPosition(function(position){
-      $.post("/", {lat: position.coords.latitude, long: position.coords.longitude}, function(data){
-        console.log(data);
-
-
-
-        var myLatLng = {lat:  position.coords.latitude, lng: position.coords.longitude};
-
-        map = new google.maps.Map(document.getElementById("map"), {
-          center: myLatLng,
-          zoom: 15
-        });
-
-        var firstMarker = new google.maps.Marker({
-          map: map,
-          position: myLatLng,
-          title: "You're Here!"
-        });
-
-        function emphasizeMapMarker(){
-
-        }
-
-        for(var i = 0; i < data.length; i++){
-          var otherMarkers = new google.maps.Marker({
-            position: {lat: data[i].gpsCoord.latitude, lng: data[i].gpsCoord.longitude},
-            title: data[i].name,
-            icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-          });
-          otherMarkers.setMap(map);
-
-
-
-          $("#restContent").append(
-            $("<div/>", {class: "mdl-card mdl-shadow--2dp"}).append(
-              $("<div/>", {class: "mdl-card__title"}).append(
-                $("<h2/>", {class: "mdl-card__title-text", text: data[i].name})
-              )
-            ).append(
-              $("<div/>", {class: "mdl-card__supporting-text", text: data[i].phone})
-            ).append(
-              $("<div/>", {class: "mdl-card__actions mdl-card--border"}).append(
-                $("<a/>", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect",
-                          text: data[i].categories[0][0]})
-              )
-            ).append(
-              $("<div/>", {class: "mdl-card__menu"}).append(
-                $("<button/>", {class: "mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"}).append(
-                  $("<i/>", {class: "material-icons", text: "places"})
-                )
-              )
-            )
-          );
-
-        }
-      });
-    });
-  }
-
-
-
-
-</script>
+<script type= "text/javascript" src = "./views/js/index.js"></script>

@@ -1,0 +1,39 @@
+html, body{height: 100% ;margin: 0; padding: 0; body: relative;}
+#map{height: 100%;}
+main{height: 100%;}
+.mdl-layout__drawer{
+  background: url("../../images/fw3.jpg") center/cover;
+  width: 20%;
+}
+
+.material-icons.md-48{font-size: 48px;}
+
+.mdl-card{width: 95%; margin-top: 2%;}
+
+.demo-list-radio {display: inline;}
+
+.nested_drawer{
+  /*Make Fixed*/
+}
+
+.root_title{background-color: white;}
+
+
+
+.title_card{
+  display: inline-block;
+  background-color: white;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.title_card ul li a{
+  text-decoration: none;
+}
+
+#banner_text{
+  text-decoration: none;
+  font-size: 30px;
+}
