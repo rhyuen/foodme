@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require("express-handlebars");
+var helmet = require("helmet");
 var mainroute = require("./mainroute.js");
 
 
@@ -16,6 +17,7 @@ app.set("PORT", process.env.PORT || 9098);
 
 
 app.use(favicon(path.join(__dirname, 'public', 'stackexchange.ico')));
+app.use(helmet());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,8 +29,6 @@ app.engine(".hbs", exphbs({defaultLayout: "layout",
   extname: ".hbs"
 }));
 app.set("view engine", ".hbs");
-
-
 
 app.use("/", mainroute);
 
@@ -65,5 +65,6 @@ app.use(function(err, req, res, next) {
 
 
 app.listen(app.get("PORT"), function(){
-  console.log("Application is on PORT: %s", app.get("PORT"));
+  console.log("App Start Time: %s", new Date().toLocaleTimeString());
+  console.log("App on PORT: %s", app.get("PORT"));
 });

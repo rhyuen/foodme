@@ -62,5 +62,6 @@ if(navigator.geolocation){
   });
 }else{
   console.log("GPS Coords Permission Denied.");
-  //Put up a lack of gps perm notice.
+
+  $("#map").append($("<p/>", {text: "Refresh the page and say 'Yes' when prompted or the site provides no benefit."}));
 }
