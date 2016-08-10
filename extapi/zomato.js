@@ -24,7 +24,8 @@ var getZomatoData = function(lat, lon, cb){
         name: currRestaurant.name,
         location: currRestaurant.location,      //obj
         categories: currRestaurant.cuisines,
-        rating: currRestaurant.user_rating      //obj
+        rating: currRestaurant.user_rating,      //obj
+        image: currRestaurant.featured_image
       };
 
       zomatoList.push(currZomato);

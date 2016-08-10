@@ -11,26 +11,37 @@ function removeCopies(container){
   });
 }
 
-//Returns KM
+//Returns in meters
 function getDistanceBetweenGPSCoord(firstLat, firstLon, secondLat, secondLon){
+  var EARTHRADIUS = 6371000;
+  var deltaLat = (secondLat - firstLat)*Math.PI/180;
+  var deltaLon = (secondLon - firstLon)* Math.PI/180;
+  var firstLatRad = firstLat * Math.PI/180;
+  var secondLatRad = secondLat * Math.PI/180;
 
-  return "FillerValue";
+  var a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+          Math.sin(deltaLon/2) * Math.sin(deltaLon/2) *
+          Math.cos(firstLatRad) * Math.cos(secondLatRad);
+  var curve = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  return Math.ceil(EARTHRADIUS * curve);
 }
 
 if(navigator.geolocation){
-
-  var map;
   navigator.geolocation.getCurrentPosition(function(position){
     $.post("/", {lat: position.coords.latitude, long: position.coords.longitude}, function(data){
+
+      var hostLat = position.coords.latitude;
+      var hostLon = position.coords.longitude;
 
       console.log(data);
 
       var myLatLng = {
-        lat:position.coords.latitude,
-        lng: position.coords.longitude
+        lat: hostLat,
+        lng: hostLon
       };
 
-      map = new google.maps.Map(document.getElementById("map"), {
+      var map = new google.maps.Map(document.getElementById("map"), {
         center: myLatLng,
         zoom: 15
       });
@@ -41,12 +52,6 @@ if(navigator.geolocation){
         title: "You're Here!"
       });
 
-      function emphasizeMapMarker(){
-        /*onclick,
-            emph mapmarker,
-            re centre map on it.
-        */
-      }
 
       var yelp = data.yelp_data;
 
@@ -60,6 +65,9 @@ if(navigator.geolocation){
           icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
         });
         otherMarkers.setMap(map);
+
+
+        //TODO: On Click of Overlay, add Popup
 
         $("#restContent")
           .append($("<div/>", {class: "mdl-card mdl-shadow--2dp"})
@@ -88,13 +96,15 @@ if(navigator.geolocation){
         });
         zomato_markers.setMap(map);
 
+        var currZomatoGPStoDist = getDistanceBetweenGPSCoord(hostLat, hostLon, parseFloat(zomato_listing.location.latitude), parseFloat(zomato_listing.location.longitude));
+
         $("#restContent")
           .append($("<div/>", {class: "mdl-card mdl-shadow--2dp"})
           .append($("<div/>", {class: "mdl-card__title"})
           .append($("<h2/>", {class: "mdl-card__title-text", text: zomato_listing.name})))
-          .append($("<div/>", {class: "mdl-card__supporting-text", text: "PHONE NUMBER"})
+          .append($("<div/>", {class: "mdl-card__supporting-text"})
           .append($("<p/>", {text: zomato_listing.location.address}))
-          .append($("<p/>", {text: "Dist: " + getDistanceBetweenGPSCoord(1,1,1,1) + "m"}))
+          .append($("<p/>", {text: "Dist: " + currZomatoGPStoDist + "m"}))
           .append($("<p/>", {text: "Score: " + zomato_listing.rating.aggregate_rating + "/5 ("+ zomato_listing.rating.votes+" votes)"})))
           .append($("<div/>", {class: "mdl-card__actions mdl-card--border"})
           .append($("<a/>", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", text: zomato_listing.categories})))
