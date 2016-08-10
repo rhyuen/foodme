@@ -11,6 +11,12 @@ function removeCopies(container){
   });
 }
 
+//Returned KM
+function getDistanceBetweenGPSCoord(firstLat, firstLon, secondLat, secondLon){
+
+  return "FillerValue";
+}
+
 if(navigator.geolocation){
 
   var map;
@@ -36,14 +42,20 @@ if(navigator.geolocation){
       });
 
       function emphasizeMapMarker(){
-
+        /*onclick,
+            emph mapmarker,
+            re centre map on it.
+        */
       }
 
       var yelp = data.yelp_data;
 
       yelp.map(function(yelp_listing){
         var otherMarkers = new google.maps.Marker({
-          position: {lat: yelp_listing.gpsCoord.latitude, lng: yelp_listing.gpsCoord.longitude},
+          position: {
+            lat: yelp_listing.gpsCoord.latitude,
+            lng: yelp_listing.gpsCoord.longitude
+          },
           title: yelp_listing.name,
           icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
         });
@@ -63,9 +75,34 @@ if(navigator.geolocation){
           .append($("<button/>", {class: "mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"})
           .append($("<i/>", {class: "material-icons", text: "places"})))));
       });
-    });
 
-    
+      var zomato = data.zomato_data;
+      zomato.map(function(zomato_listing){
+        var zomato_markers = new google.maps.Marker({
+          position: {
+            lat: parseFloat(zomato_listing.location.latitude),
+            lng: parseFloat(zomato_listing.location.longitude)
+          },
+          title: zomato_listing.name,
+          icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        zomato_markers.setMap(map);
+
+        $("#restContent")
+          .append($("<div/>", {class: "mdl-card mdl-shadow--2dp"})
+          .append($("<div/>", {class: "mdl-card__title"})
+          .append($("<h2/>", {class: "mdl-card__title-text", text: zomato_listing.name})))
+          .append($("<div/>", {class: "mdl-card__supporting-text", text: "PHONE NUMBER"})
+          .append($("<p/>", {text: zomato_listing.location.address}))
+          .append($("<p/>", {text: "Dist: " + getDistanceBetweenGPSCoord(1,1,1,1) + "m"}))
+          .append($("<p/>", {text: "Score: " + zomato_listing.rating.aggregate_rating + "/5 ("+ zomato_listing.rating.votes+" votes)"})))
+          .append($("<div/>", {class: "mdl-card__actions mdl-card--border"})
+          .append($("<a/>", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", text: zomato_listing.categories})))
+          .append($("<div/>", {class: "mdl-card__menu"})
+          .append($("<button/>", {class: "mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"})
+          .append($("<i/>", {class: "material-icons", text: "places"})))));
+      });
+    });
   });
 }else{
   console.log("GPS Coords Permission Denied.");
