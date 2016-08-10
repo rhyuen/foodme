@@ -11,7 +11,7 @@ function removeCopies(container){
   });
 }
 
-//Returned KM
+//Returns KM
 function getDistanceBetweenGPSCoord(firstLat, firstLon, secondLat, secondLon){
 
   return "FillerValue";

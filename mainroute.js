@@ -1,6 +1,6 @@
 var express = require("express");
 var config = require("./config.js");
-var yelp = require("./extapi/yelp.js");
+var yelp = require("./extapi/yelpapi.js");
 var zomato = require("./extapi/zomato.js");
 var async = require("async");
 
