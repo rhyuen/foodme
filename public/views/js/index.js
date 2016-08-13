@@ -52,8 +52,12 @@ if(navigator.geolocation){
         title: "You're Here!"
       });
 
-
       var yelp = data.yelp_data;
+      if(yelp === null || yelp === [] || yelp === ""){
+        console.error("ERROR: POI: YELP KEYS.");
+        document.getElementById("map").append($("<p/>", {text: "The Keys are no longer correct."}));
+        return;
+      }
 
       yelp.map(function(yelp_listing){
         var otherMarkers = new google.maps.Marker({
@@ -67,7 +71,18 @@ if(navigator.geolocation){
         otherMarkers.setMap(map);
 
 
-        //TODO: On Click of Overlay, add Popup
+        otherMarkers.addListener("click", function(){
+          var infoWindowContent = "<div><h4>"
+                                + "NAME: " + yelp_listing.name + "</h4><p>"
+                                + "RATING: " + yelp_listing.cumulRating + "<br>"
+                                + "ADDR: " + yelp_listing.address[0] + "<br>"
+                                + "DIST: " + Math.ceil(yelp_listing.relDistance) + "</p></div>";
+          var infowindow = new google.maps.InfoWindow({
+            content:  infoWindowContent
+          });
+          infowindow.open(map, otherMarkers);
+        });
+
 
         $("#restContent")
           .append($("<div/>", {class: "mdl-card mdl-shadow--2dp"})
@@ -97,6 +112,18 @@ if(navigator.geolocation){
         zomato_markers.setMap(map);
 
         var currZomatoGPStoDist = getDistanceBetweenGPSCoord(hostLat, hostLon, parseFloat(zomato_listing.location.latitude), parseFloat(zomato_listing.location.longitude));
+
+        zomato_markers.addListener("click", function(){
+          var zomatoWindowContent = "<div><h4>"
+                                + "NAME: " + zomato_listing.name + "</h4><p>"
+                                + "RATING: " + zomato_listing.rating.aggregate_rating + "<br>"
+                                + "ADDR: " + zomato_listing.location.address + "<br>"
+                                + "DIST: " + currZomatoGPStoDist + "</p></div>";
+          var zomatoInfoWindow = new google.maps.InfoWindow({
+            content:  zomatoWindowContent
+          });
+          zomatoInfoWindow.open(map, zomato_markers);
+        });
 
         $("#restContent")
           .append($("<div/>", {class: "mdl-card mdl-shadow--2dp"})

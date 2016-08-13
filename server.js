@@ -68,3 +68,6 @@ app.listen(app.get("PORT"), function(){
   console.log("App Start Time: %s", new Date().toLocaleTimeString());
   console.log("App on PORT: %s", app.get("PORT"));
 });
+
+
+module.exports = app;
