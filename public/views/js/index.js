@@ -11,6 +11,8 @@ function removeCopies(container){
   });
 }
 
+
+
 //Returns in meters
 function getDistanceBetweenGPSCoord(firstLat, firstLon, secondLat, secondLon){
   var EARTHRADIUS = 6371000;
@@ -18,7 +20,6 @@ function getDistanceBetweenGPSCoord(firstLat, firstLon, secondLat, secondLon){
   var deltaLon = (secondLon - firstLon)* Math.PI/180;
   var firstLatRad = firstLat * Math.PI/180;
   var secondLatRad = secondLat * Math.PI/180;
-
   var a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
           Math.sin(deltaLon/2) * Math.sin(deltaLon/2) *
           Math.cos(firstLatRad) * Math.cos(secondLatRad);
@@ -26,6 +27,8 @@ function getDistanceBetweenGPSCoord(firstLat, firstLon, secondLat, secondLon){
 
   return Math.ceil(EARTHRADIUS * curve);
 }
+
+
 
 if(navigator.geolocation){
   navigator.geolocation.getCurrentPosition(function(position){
@@ -46,16 +49,87 @@ if(navigator.geolocation){
         zoom: 15
       });
 
+      //CURRENT LOCATION MARKER
       var firstMarker = new google.maps.Marker({
         map: map,
         position: myLatLng,
         title: "You're Here!"
       });
 
+      //GOOGLE PLACES MARKERS
+      var gPlacesService = new google.maps.places.PlacesService(map);
+      var gPlacesRequest = {
+        location: myLatLng,
+        radius: "500",
+        types: ["restaurant"]
+      };
+
+      function addMapMarker(location){
+        var request = {placeId: location.place_id};
+
+        gPlacesService.getDetails(request, function(place, status){
+          if(status === google.maps.places.PlacesServiceStatus.OK){
+            console.log(place);
+
+            //TODO: ADD Side cards
+            //TODO: PUT BELOW CODE IN HERE.
+
+          }else{
+            console.error({
+              message: "Somethng is wrong with the Google Places API.",
+              status: status,
+              value: place});
+          }
+        });
+
+        var marker = new google.maps.Marker({
+          map: map,
+          position: location.geometry.location,
+          title: location.name,
+          icon: {
+            url:"https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+            anchor: new google.maps.Point(10,10),
+          }
+        });
+        //POPUP LISTENER FOR GOOGLE PLACES MARKER
+        marker.addListener("click", function(){
+          gPlacesService.getDetails(location, function(gPlacesResults, status){
+            if(status !== google.maps.places.PlacesServiceStatus.OK){
+              console.error(status);
+              return;
+            }
+
+            var infoWindow = new google.maps.InfoWindow();
+            //var infoWindow = new google.maps.places.PlacesService(map);
+            var contentString = "<h4> NAME: " + gPlacesResults.name + "</h4><div>"
+                                   + "RATING: " + gPlacesResults.rating + "<br>"
+                                   + "ADDR: " + gPlacesResults.vicinity.toString() + "<br></div>";
+            infoWindow.setContent(contentString);
+            infoWindow.open(map, marker);
+          });
+        });
+      }
+
+
+
+      gPlacesService.nearbySearch(gPlacesRequest, function(gPlacesResults, status){
+        if(status !== google.maps.places.PlacesServiceStatus.OK){
+          console.error(status);
+          return;
+        }else{
+          console.log(gPlacesResults);
+          gPlacesResults.map(function(currGPlace){
+            addMapMarker(currGPlace);
+          });
+        }
+      });
+
+
+
       var yelp = data.yelp_data;
-      if(yelp === null || yelp === [] || yelp === ""){
+      if(yelp === null){
         console.error("ERROR: POI: YELP KEYS.");
-        document.getElementById("map").append($("<p/>", {text: "The Keys are no longer correct."}));
+        $("#map").append($("<p/>", {text: "The Keys are no longer correct."}));
         return;
       }
 
@@ -119,9 +193,11 @@ if(navigator.geolocation){
                                 + "RATING: " + zomato_listing.rating.aggregate_rating + "<br>"
                                 + "ADDR: " + zomato_listing.location.address + "<br>"
                                 + "DIST: " + currZomatoGPStoDist + "</p></div>";
+
           var zomatoInfoWindow = new google.maps.InfoWindow({
             content:  zomatoWindowContent
           });
+
           zomatoInfoWindow.open(map, zomato_markers);
         });
 

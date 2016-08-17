@@ -1,0 +1,11 @@
+version: "1"
+services:
+  web:
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - "9098:9098"
+    volumes:
+      - .:/home/app/code
+      - /home/app/code/node_modules
