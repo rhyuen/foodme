@@ -74,39 +74,38 @@ if(navigator.geolocation){
             //TODO: ADD Side cards
             //TODO: PUT BELOW CODE IN HERE.
 
+            var marker = new google.maps.Marker({
+              map: map,
+              position: location.geometry.location,
+              title: location.name,
+              icon: {
+                url:"https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+                anchor: new google.maps.Point(10,10),
+              }
+            });
+            //POPUP LISTENER FOR GOOGLE PLACES MARKER
+            marker.addListener("click", function(){
+              gPlacesService.getDetails(location, function(gPlacesResults, status){
+                if(status !== google.maps.places.PlacesServiceStatus.OK){
+                  console.error(status);
+                  return;
+                }
+
+                var infoWindow = new google.maps.InfoWindow();
+                var contentString = "<h4> NAME: " + gPlacesResults.name + "</h4><div>"
+                                       + "RATING: " + gPlacesResults.rating + "<br>"
+                                       + "ADDR: " + gPlacesResults.vicinity.toString() + "<br></div>";
+                infoWindow.setContent(contentString);
+                infoWindow.open(map, marker);
+              });
+            });
+
           }else{
             console.error({
               message: "Somethng is wrong with the Google Places API.",
               status: status,
               value: place});
           }
-        });
-
-        var marker = new google.maps.Marker({
-          map: map,
-          position: location.geometry.location,
-          title: location.name,
-          icon: {
-            url:"https://maps.google.com/mapfiles/ms/icons/orange-dot.png",
-            anchor: new google.maps.Point(10,10),
-          }
-        });
-        //POPUP LISTENER FOR GOOGLE PLACES MARKER
-        marker.addListener("click", function(){
-          gPlacesService.getDetails(location, function(gPlacesResults, status){
-            if(status !== google.maps.places.PlacesServiceStatus.OK){
-              console.error(status);
-              return;
-            }
-
-            var infoWindow = new google.maps.InfoWindow();
-            //var infoWindow = new google.maps.places.PlacesService(map);
-            var contentString = "<h4> NAME: " + gPlacesResults.name + "</h4><div>"
-                                   + "RATING: " + gPlacesResults.rating + "<br>"
-                                   + "ADDR: " + gPlacesResults.vicinity.toString() + "<br></div>";
-            infoWindow.setContent(contentString);
-            infoWindow.open(map, marker);
-          });
         });
       }
 
